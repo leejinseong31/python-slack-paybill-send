@@ -1,0 +1,32 @@
+name: Monthly Slack DM Bot
+
+on:
+  schedule:
+    # ⚠️ 중요: GitHub Actions는 UTC(세계 표준시)를 사용합니다.
+    # 한국 시간(KST) 오전 10시는 UTC로 '오전 1시'입니다.
+    # 분 시 일 월 요일
+    - cron: '0 1 * * *'
+  workflow_dispatch: # 이 한 줄을 넣으면 GitHub 웹사이트에서 버튼 눌러서 수동 실행도 가능해집니다!
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 코드 체크아웃
+      uses: actions/checkout@v4
+
+    - name: 파이썬 환경 세팅
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+
+    - name: 패키지 설치
+      run: |
+        pip install -r requirements.txt
+
+    - name: 봇 실행
+      env:
+        # GitHub Secrets에 저장한 슬랙 주소를 환경변수로 주입
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      run: python slack_bot.py
