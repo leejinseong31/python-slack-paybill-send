@@ -46,3 +46,4 @@ if __name__ == "__main__":
         send_slack_dm()
     else:
         print("조건 불일치: 오늘은 알림 발송일이 아닙니다.")
+         send_slack_dm()
